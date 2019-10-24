@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.moneyhub.web.cmm.IConsumer;
 import com.moneyhub.web.cmm.IFunction;
-import com.moneyhub.web.cmm.IPredicate;
 import com.moneyhub.web.utl.Printer;
 
 @RestController
@@ -27,12 +26,14 @@ public class ClientCtrl {
 	@Autowired ClientMapper clientMapper;
 	
 	@GetMapping("/{cid}/exist")
-	public Map<?,?> existId(@RequestBody String cid){
-		IFunction<String,Integer> p = o -> clientMapper.existId(cid);
-		map.clear();	
-		map.put("msg", (p.apply(cid)==0) ? "SUCCESS" : "FAIL");
-		return map;
-	}
+    public Map<?,?> exist(@PathVariable String cid){
+        System.out.println(cid);
+        IFunction<String, Integer> p = o -> clientMapper.existId(cid);
+        map.clear();
+        map.put("msg", (p.apply(cid)==0) ? "SUCCESS" : "FAIL");
+        System.out.println(map.get("msg"));
+        return map;
+    }
 	
 	@PostMapping("/")
 	public Map<?,?> join(@RequestBody Client param) {
@@ -45,19 +46,19 @@ public class ClientCtrl {
 	}
 	
 	@PostMapping("/{cid}")
-	public Client login(@PathVariable String uid, @RequestBody Client param){
+	public Client login(@PathVariable String cid, @RequestBody Client param){
 		IFunction<Client, Client> f = t -> clientMapper.selectByIdPw(param);
 		return f.apply(param);
 	}
 	
 	@GetMapping("/{cid}")
-	public Client searchClientById(@PathVariable String uid, @RequestBody Client param){
+	public Client searchClientById(@PathVariable String cid, @RequestBody Client param){
 		IFunction<Client, Client> f = t -> clientMapper.selectByIdPw(param);
 		return f.apply(param);
 	}
 	
 	@PutMapping("/{cid}")
-	public Map<?,?> updateClient(@PathVariable String uid, @RequestBody Client param){
+	public Map<?,?> updateClient(@PathVariable String cid, @RequestBody Client param){
 		IConsumer<Client> c = t -> clientMapper.insertClient(param);
 		c.accept(param);
 		map.clear();
@@ -66,7 +67,7 @@ public class ClientCtrl {
 	}
 	
 	@DeleteMapping("/{cid}")
-	public Map<?,?> removeClient(@PathVariable String uid, @RequestBody Client param){
+	public Map<?,?> removeClient(@PathVariable String cid, @RequestBody Client param){
 		IConsumer<Client> c = t -> clientMapper.insertClient(param);
 		c.accept(param);
 		map.clear();
