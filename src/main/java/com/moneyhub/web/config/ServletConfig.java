@@ -9,7 +9,7 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.moneyhub.web.cmm"})
+@ComponentScan(basePackages = {"com.moneyhub.web"})
 public class ServletConfig implements WebMvcConfigurer{
 	
 	@Override

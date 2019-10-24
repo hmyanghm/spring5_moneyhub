@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class User{
+public class Client{
 	private String cid,
 	pwd,
 	cname,
