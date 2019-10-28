@@ -1,119 +1,159 @@
 "use strict";
-var auth = auth || {}
-
+var auth = auth || {};
 auth = (()=>{
-	const WHEN_ERR = '호출하는 JS 파일을 찾지 못했습니다.'
-	let _,js,vue;
-	let init = ()=>{
-		_=$.ctx();
-		js=$.js();
-		vue = js+'/vue/auth_vue.js';
-	} 
-	let onCreate =()=>{
-		init();
-		$.getScript(vue).done(()=>{
+	const WHEN_ERR = '호출하는 JS 파일을 찾지 못했습니다.';	
+	let _, js, vue, brdvue, brd_js, router_js;
+	
+	let init = () => {
+		_ = $.ctx();
+		js = $.js();
+		vue = js + '/vue/auth_vue.js';	//스트링값, 객체가 아니다
+		brdvue = js + '/vue/brd_vue.js';
+		brd_js = js + '/brd/brd.js';
+		router_js = js +'/cmm/router.js'
+	}	
+	
+	let onCreate = () =>{
+        init()
+        $.when(
+        	$.getScript(vue),
+        	$.getScript(brd_js)
+        )
+        .done(()=>{
         	setContentView()
     		$('#a_go_join').click(e=>{
          		e.preventDefault()
-  				$.getScript(vue)
-					$('head').html(auth_vue.join_head())
-					$('body').html(auth_vue.join_body())
-					$('<button>',{
-							text : '회원가입' , 
-							href: '#' ,
-							click : e=>{
-				         		e.preventDefault()
-								let data = { 
-										cid :  $('#clientid').val() ,
-										pwd : $('#password').val(),
-										cname : $('#cname').val()
-								}
-				         		existId(data);
-				         		
-							} 
-						})
-						.addClass('btn btn-primary btn-lg btn-block')
-						.appendTo('#btn_join')       		
+         		$('head').html(auth_vue.join_head())
+		        $('body').addClass('text-center')
+		        .html(auth_vue.join_body())
+		        $('#clientid').keyup(()=>{
+		        	if($('#clientid').val().length > 2)
+		        		if(!existId($('#clientid').val())){}
+		        })		        
+		        $('<button>',{
+		            text : 'Continue to checkout',
+		            href : '#',
+		            click : e=>{            	
+		            	e.preventDefault(); 
+		            		join()            	
+		            }
+		        })
+		        .addClass('btn btn-primary btn-lg btn-block')
+		        .appendTo('#btn_join')         		
     		})
         }).fail(()=>{alert(WHEN_ERR)})
-	}
-	let setContentView = ()=>{
+    }
+	
+	let setContentView =()=>{
+		$('head').html(auth_vue.login_head({css: $.css(), img: $.img(),  js: $.js()}))
+        $('body').addClass('text-center')
+        .html(auth_vue.login_body({css: $.css(), img: $.img(),  js: $.js()}))
 		login()
-	}
-	let join = data=>{
-				$.ajax({
-					url : _+'/client/', 
-					type : 'POST',
-					dataType : 'json',
-					data: JSON.stringify(data) , 
-					contentType : 'application/json',
-					success : d =>{
-						alert('AJAX 성공 ' + d.msg)
-						if (d.msg==='SUCCESS') 
-							login()
-					},
-					error : e =>{
-						alert('AJAX실패')
-					}
-				})    
-	}	
-	let existId = x =>{
+    }
+	
+	let join =()=>{
+		init()
+    	let data = {cid : $('#clientid').val(), pwd : $('#password').val(), cname : $('#cname').val()}
+//            	alert('전송아이디: '+data.cid)
+                $.ajax({                	
+			    	url : _+'/client/',
+			    	type : 'POST',
+			    	dataType : 'json',
+			    	data : JSON.stringify(data),
+			    	contentType : 'application/json',
+			    	success : d => {
+//			    		alert('AJAX 성공 아이디: '+d.msg)
+			    		if(d.msg==='SUCCESS'){ 
+			    			$('head').html(auth_vue.login_head({css: $.css(), img: $.img(),  js: $.js()}))
+			    	        $('body').addClass('text-center')
+			    	        .html(auth_vue.login_body({css: $.css(), img: $.img(),  js: $.js()}))
+			    			login() 
+			    		}
+			    		else 
+			    			alert('회원가입 실패')
+			    	},
+			    	error : e => {
+			    		alert('AJAX JOIN 실패')
+			    	}
+            	})
+    }
+	
+	let existId = x => {
+		init()
 		$.ajax({
-			url : _+'/client/'+x.cid+'/exist', 
-			type : 'GET',
+			url : _ + '/client/' + x + '/exist',
+//			type : 'GET',//default라 지워도 된다.
 			contentType : 'application/json',
-			success : d =>{
-				if (d.msg==='SUCCESS') {
-					alert('사용 가능한 아이디입니다 ' + d.msg);
-					join(x)
+			success : d => {
+//				alert('exist success')
+				if(d.msg=='SUCCESS'){
+					$('#dupl_check')
+					.val('사용가능한 ID입니다.')
+					.css('color', 'blue')
 					return true;
 				}else{
-					alert('중복된 아이디 입니다.');	
-				return false;
+					$('#dupl_check')
+					.val('이미 존재하는 ID입니다.')
+					.css('color', 'red')
+					return false;
 				}
 			},
-			error : e =>{
-				alert('exist error')
+			error : e => {
+				alert('AJAX fail')
 				return false;
 			}
-		})    
-	}
-	let login = ()=>{
-		let x = {css : $.css(), img : $.img(), js:$.js() }
-		$('head').html(auth_vue.login_head(x))
-		$('body')
-		.addClass('text-center')
-		.html(auth_vue.login_body(x))
-		$('<button>',{
-			type: "submit",
-			text : "Log In",
-			click: 	e=>{									
-					e.preventDefault()
-					let data = { cid : $('#clientid').val(),
-								 pwd : $('#password').val()}
-					$.ajax({
-						url : _+'/client/'+data.cid, 
-						type : 'POST',
-						dataType : 'json',
-						data: JSON.stringify(data) , 
-						contentType : 'application/json',
-						success : d =>{
-								alert(d.cname + '님 환영합니다.')
-								board(d)
-						},
-						error : e =>{
-							alert('AJAX ERROR' )
-						}
-					})    
-			}
 		})
-		.addClass('btn btn-lg btn-primary btn-block')
-		.appendTo('#btn_login')		
 	}
-	let board = d =>{
-		let x = {css : $.css(), img : $.img(), js:$.js(), resultData: d}
-			$('head').html(auth_vue.brd_head(x))
-			$('body').html(auth_vue.brd_body(x))
-	}
-	return {onCreate, join, login, board}
+	
+	let login =()=>{
+		init()        	
+        $('<button>',{
+        	type : "submit",
+        	text : "로그인",
+        	click : e => {
+        		e.preventDefault()           		
+        		let client = {cid: $('#cid').val(), pwd: $('#pwd').val() }        		
+	        	$.ajax({
+	        		url : _+'/client/'+client.cid, 
+	        		type : 'POST',
+				   	data : JSON.stringify({
+				   		cid : $('#cid').val(),
+				   		pwd : $('#pwd').val()
+				   	}),
+				   	dataType : 'json',
+				   	contentType : 'application/json',
+				   	success : d => {
+//				   		alert(d.cid+'님 환영합니다.')
+				   		$.when(
+				   			$.getScript(router_js,$.extend(new Client(d))),
+				   			$.getScript(brd_js)
+				   		).done(()=>{
+//				   			alert($.cid());
+				   			brd.onCreate();
+				   		}
+				   		).fail(()=>{
+				   			alert('WHEN DONE 실패')
+				   		})
+//				   		myPage()
+				   	},
+				   	error : e => {
+				   		alert('AJAX 실패')
+				   	}
+	        	})
+        	}
+        })
+        .addClass('btn btn-lg btn-primary btn-block')
+    	.appendTo('#btn_login')	
+    }
+	
+//	let myPage = () => {
+//		init()
+//		$.getScript(brdvue).done(()=>{
+//			$('head').html(brd_vue.brd_head())
+//	        $('body').html(brd_vue.brd_body())    
+//		}).fail(()=>{alert(WHEN_ERR)})
+//	}
+	
+	return {onCreate, join, login}
+	
 })();

@@ -6,5 +6,6 @@
     </settings>
     <typeAliases>
        <typeAlias alias="Client"  type="com.moneyhub.web.usr.Client"/>
+       <typeAlias alias="Article"  type="com.moneyhub.web.brd.Article"/>
     </typeAliases>
 </configuration>
