@@ -4,9 +4,13 @@
 
 <mapper namespace="com.moneyhub.web.brd.ArticleMapper">
     
-	<select id="insertArticle" parameterType="Article">
+	<insert id="insertArticle" parameterType="Article">
        INSERT INTO ARTICLE (cid, board_type, title, content) VALUES(
 				#{cid}, #{boardType}, #{title}, #{content})
+    </insert>
+    
+    <select id="countArticle" resultType="string">
+       SELECT COUNT(*) FROM ARTICLE
     </select>
     
 </mapper>
