@@ -1,7 +1,7 @@
 /* https://getbootstrap.com/docs/4.0/examples/offcanvas/ */
 var brd_vue = brd_vue || {}
 brd_vue = {
-	brd_head:()=>{
+	brd_head: x=>{
 		return '<head>'+
 		'    <meta charset="utf-8">'+
 	    '<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">'+
@@ -18,42 +18,8 @@ brd_vue = {
 	'  </head>'
 	
 	},
-	brd_body: ()=>{
-		return  '<body class="bg-light">'+
-
-		'    <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">'+
-		'      <a class="navbar-brand" href="#">Offcanvas navbar</a>'+
-		'      <button class="navbar-toggler p-0 border-0" type="button" data-toggle="offcanvas">'+
-		'        <span class="navbar-toggler-icon"></span>'+
-		'      </button>'+
-		'      <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">'+
-		'        <ul class="navbar-nav mr-auto">'+
-		'          <li id="go_write" class="nav-item active">'+
-		'          </li>'+
-		'          <li class="nav-item">'+
-		'            <a class="nav-link" href="#">Notifications</a>'+
-		'          </li>'+
-		'          <li class="nav-item">'+
-		'            <a class="nav-link" href="#">Profile</a>'+
-		'          </li>'+
-		'          <li class="nav-item">'+
-		'            <a class="nav-link" href="#">Switch account</a>'+
-		'          </li>'+
-		'          <li class="nav-item dropdown">'+
-		'            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Settings</a>'+
-		'            <div class="dropdown-menu" aria-labelledby="dropdown01">'+
-		'              <a class="dropdown-item" href="#">Action</a>'+
-		'              <a class="dropdown-item" href="#">Another action</a>'+
-		'              <a class="dropdown-item" href="#">Something else here</a>'+
-		'            </div>'+
-		'          </li>'+
-		'        </ul>'+
-		'        <form class="form-inline my-2 my-lg-0">'+
-		'          <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">'+
-		'          <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>'+
-		'        </form>'+
-		'      </div>'+
-		'    </nav>'+
+	brd_body: x=>{
+		return  '<body class="bg-light"><div id="navi"></div>'+
 		'    <div class="nav-scroller bg-white box-shadow">'+
 		'      <nav class="nav nav-underline">'+
 		'        <a class="nav-link active" href="#"><i class="fas fa-bomb fa-2x"></i></a>'+
@@ -159,11 +125,11 @@ brd_vue = {
 		return '<div class="container-fluid" style="width:80%">'+
 		'<h1>ARTICLE WRITING</h1>'+
 		'<form id="write_form">'+
-		'<input type="text" id="writer" name="writer" style="margin-top:20px" class="form-control" placeholder="작성자 ID" />'+
-		'<input type="text" id="title" name="title" style="margin-top:20px" class="form-control" placeholder="제목" /><br />'+
+		'<input type="text" name="writer" style="margin-top:20px" class="form-control" placeholder="작성자 ID" />'+
+		'<input type="text" name="title" style="margin-top:20px" class="form-control" placeholder="제목" /><br />'+
 		'<div class="row">'+
 		'<div style="width:97%; margin:10px auto" >'+
-		'<textarea id="content" name="content" class="form-control" rows="10"></textarea>'+
+		'<textarea name="content" class="form-control" rows="10"></textarea>'+
 		' </div>'+
 		' </div>'+
 		/*' <input type="reset" class="btn btn-danger" style="float:right;width:100px;margin-right:10px" value="CANCEL"/>'+

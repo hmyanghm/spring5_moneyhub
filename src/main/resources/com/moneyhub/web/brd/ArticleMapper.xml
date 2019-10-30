@@ -13,4 +13,8 @@
        SELECT COUNT(*) FROM ARTICLE
     </select>
     
+   <select id="selectAll" resultType="Article">
+   		SELECT A.BOARD_TYPE AS boardType, A.* FROM ARTICLE A
+   </select>
+   
 </mapper>

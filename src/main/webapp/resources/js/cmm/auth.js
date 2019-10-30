@@ -1,23 +1,27 @@
 "use strict";
 var auth = auth || {};
 auth = (()=>{
-	const WHEN_ERR = '호출하는 JS 파일을 찾지 못했습니다.';	
-	let _, js, vue, brdvue, brd_js, router_js;
-	
+	const WHEN_ERR = '호출하는 JS 파일을 찾지 못했습니다.auth';	
+	let _, js, css, img, vue, brdvue, brd_js, router_js, cookie_js;
 	let init = () => {
-		_ = $.ctx();
-		js = $.js();
-		vue = js + '/vue/auth_vue.js';	//스트링값, 객체가 아니다
-		brdvue = js + '/vue/brd_vue.js';
-		brd_js = js + '/brd/brd.js';
+		_ = $.ctx()
+		js = $.js()
+		css = $.css()
+		img = $.img()
+		vue = js + '/vue/auth_vue.js'	//스트링값, 객체가 아니다
+		brdvue = js + '/vue/brd_vue.js'
+		brd_js = js + '/brd/brd.js'
 		router_js = js +'/cmm/router.js'
+		cookie_js = js + '/cmm/cookie.js'
 	}	
 	
 	let onCreate = () =>{
         init()
         $.when(
         	$.getScript(vue),
-        	$.getScript(brd_js)
+        	$.getScript(router_js),
+        	$.getScript(brd_js),
+        	$.getScript(cookie_js)
         )
         .done(()=>{
         	setContentView()
@@ -86,7 +90,7 @@ auth = (()=>{
 			contentType : 'application/json',
 			success : d => {
 //				alert('exist success')
-				if(d.msg=='SUCCESS'){
+				if(d.msg==='SUCCESS'){
 					$('#dupl_check')
 					.val('사용가능한 ID입니다.')
 					.css('color', 'blue')
@@ -106,15 +110,13 @@ auth = (()=>{
 	}
 	
 	let login =()=>{
-		init()        	
         $('<button>',{
         	type : "submit",
         	text : "로그인",
         	click : e => {
         		e.preventDefault()           		
-        		let client = {cid: $('#cid').val(), pwd: $('#pwd').val() }        		
 	        	$.ajax({
-	        		url : _+'/client/'+client.cid, 
+	        		url : _+'/client/'+$('#cid').val(), 
 	        		type : 'POST',
 				   	data : JSON.stringify({
 				   		cid : $('#cid').val(),
@@ -123,21 +125,12 @@ auth = (()=>{
 				   	dataType : 'json',
 				   	contentType : 'application/json',
 				   	success : d => {
-//				   		alert(d.cid+'님 환영합니다.')
-				   		$.when(
-				   			$.getScript(router_js,$.extend(new Client(d))),
-				   			$.getScript(brd_js)
-				   		).done(()=>{
-//				   			alert($.cid());
-				   			brd.onCreate();
-				   		}
-				   		).fail(()=>{
-				   			alert('WHEN DONE 실패')
-				   		})
-//				   		myPage()
+				   		setCookie("CLIENTID",d.cid)
+				   		alert('저장된 쿠키: '+getCookie("CLIENTID"))
+				   		brd.onCreate()
 				   	},
-				   	error : e => {
-				   		alert('AJAX 실패')
+				   	error: e =>{
+				   		alert('AJAX ERROR')
 				   	}
 	        	})
         	}

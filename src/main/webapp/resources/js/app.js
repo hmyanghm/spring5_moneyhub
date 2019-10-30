@@ -3,17 +3,19 @@
 var app = app || {};
 app = (()=>{	
 	const WHEN_ERR = '호출하는 JS 파일을 찾지 못했습니다.';	
-	let _, js, authjs;
+	let _, js, css, img, authjs;
 	let run = x =>
 		//세션 값 가져오기
 		//외부파일 호출,라우어테 있는걸 가져올 수 있다,x는 webapp까지다.
 		$.getScript(x + '/resources/js/cmm/router.js', ()=>{		
-			$.extend(new Session(x));			
-			onCreate();
+			$.extend(new Session(x))	
+			onCreate()
 		})
-	let init =() => {
+	let init =()=> {
 		_ = $.ctx();//세션 없을 경우
 		js = $.js();
+		css = $.css()
+		img = $.img()
 		authjs = js + '/cmm/auth.js';
 	}
 	
