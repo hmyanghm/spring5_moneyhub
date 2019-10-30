@@ -2,19 +2,17 @@
 var navi = navi || {}
 navi = (()=>{
 	const WHEN_ERR = '호출하는 JS 파일을 찾지 못했습니다.navi'
-	let _, js, css, img, brd_vue_js, router_js, brd_js, cookie_js, app_js, $clientid, auth_js
+	let _, js, css, img, brd_vue_js, router_js, brd_js, cookie_js, auth_js
 	let init =()=> {
 		_ = $.ctx()
 		js = $.js()
 		css = $.css()
 		img = $.img()
-		app_js = js + 'app.js'
 		brd_vue_js = js + '/vue/brd_vue.js'
 		router_js = js + '/cmm/router.js'
-		brd_js = js + 'brd/brd.js'
-		cookie_js = js + 'cmm/cookie.js'
-		$clientid = document.cookie
-		auth_js = js + 'cmm/auth.js'
+		brd_js = js + '/brd/brd.js'
+		cookie_js = js + '/cmm/cookie.js'
+		auth_js = js + '/cmm/auth.js'
 	}
 	let onCreate=()=>{
 		init()

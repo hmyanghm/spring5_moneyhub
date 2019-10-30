@@ -49,15 +49,18 @@ auth = (()=>{
     }
 	
 	let setContentView =()=>{
-		$('head').html(auth_vue.login_head({css: $.css(), img: $.img(),  js: $.js()}))
+		$('head').html(auth_vue.login_head({css: $.css(), img: $.img()}))
         $('body').addClass('text-center')
-        .html(auth_vue.login_body({css: $.css(), img: $.img(),  js: $.js()}))
+        .html(auth_vue.login_body({css: $.css(), img: $.img()}))
 		login()
+		access()
     }
 	
 	let join =()=>{
 		init()
-    	let data = {cid : $('#clientid').val(), pwd : $('#password').val(), cname : $('#cname').val()}
+    	let data = {cid : $('#clientid').val(),
+					pwd : $('#password').val(),
+					cname : $('#cname').val()}
 //            	alert('전송아이디: '+data.cid)
                 $.ajax({                	
 			    	url : _+'/client/',
@@ -82,7 +85,7 @@ auth = (()=>{
             	})
     }
 	
-	let existId = x => {
+	let existId =x=> {
 		init()
 		$.ajax({
 			url : _ + '/client/' + x + '/exist',
@@ -139,14 +142,33 @@ auth = (()=>{
     	.appendTo('#btn_login')	
     }
 	
-//	let myPage = () => {
-//		init()
-//		$.getScript(brdvue).done(()=>{
-//			$('head').html(brd_vue.brd_head())
-//	        $('body').html(brd_vue.brd_body())    
-//		}).fail(()=>{alert(WHEN_ERR)})
-//	}
-	
+	let access =()=>{
+		$('#a_go_admin').click(()=>{
+		let ok = confirm('사원입니까?')
+		if(ok){
+			let aid = prompt('사원번호를 입력하시오')
+			let pwd = prompt('비밀번호를 입력하시오')
+			alert('입력한 사번: '+aid)
+			$.ajax({
+				url: _+'/admins/'+aid,
+				type: 'POST',
+				data: JSON.stringify(json),
+				dataType: 'json',
+				contentType: 'application/json',
+				success: d => {
+					if(d === 'SUCCESS'){
+						alert('환영합니다')
+						admin.onCreate()
+					}else{
+						alert('접근권한이 없습니다')
+						app.run(_)
+					}
+				},
+				error: e => {}
+			})
+		}
+	})
+	}
 	return {onCreate, join, login}
 	
 })();

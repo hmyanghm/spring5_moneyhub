@@ -13,7 +13,7 @@ brd = (()=>{
 		navi_vue_js = js + '/vue/navi_vue.js'
 		cookie_js = js + '/cmm/cookie.js'
 	}
-	let onCreate =()=>{
+	let onCreate =()=> {
 		init()
 		$.when(
 			$.getScript(brd_vue_js),
@@ -26,7 +26,7 @@ brd = (()=>{
 			alert(WHEN_ERR)
 		})
 	}
-	let setContentView =()=>{
+	let setContentView =()=> {
 			$('head').html(brd_vue.brd_head({css: $.css(), img: $.img(), js: $.js()}))
 			$('body').addClass('text-center')
 			.html(brd_vue.brd_body({ctx: '/web', css: $.css(), img: $.img(), js: $.js()})) 
@@ -34,7 +34,7 @@ brd = (()=>{
 			recent_updates()
 //			$('#recentid').text('등록된 글이 없습니다')
 	}
-	let recent_updates=()=>{
+	let recent_updates =()=> {
 		$('#recent_updates .media').remove()
 		$('#suggestions').remove()
 		$('#recent_updates .d-block').remove()
@@ -58,7 +58,7 @@ brd = (()=>{
 			})
 		})
 	}
-	let write = () =>{
+	let write =()=>{
 		$('#recent_updates').html(brd_vue.brd_write())
 		$('#write_form input[name="writer"]').val(getCookie("CLIENTID"))
 		$('#suggestions').remove()
@@ -81,11 +81,14 @@ brd = (()=>{
 		.click(e=>{
 			e.preventDefault()
 			let json = {
+					content :$('#write_form textarea[name="content"]').val(),
 					cid : $('#write_form input[name="writer"]').val(),
-					title : $('#write_form input[name="title"]').val(),
-					content :$('#write_form input[name="content"]').val()
+					title : $('#write_form input[name="title"]').val()
+					
 			}
 			alert('글 내용: ' +json.content)
+			alert('아이디: ' +json.cid)
+			alert('제목: ' +json.title)
 			$.ajax({
 				url : _+'/articles/',
 				type : 'POST',
@@ -96,11 +99,11 @@ brd = (()=>{
 					$('#recent_updates div.container-fluid').remove()
 					recent_updates()
 				},
-				error : e=>{alert('에러')}
+				error : e=>{alert('brd=>write 에러')}
 			})
 		})
 	}
-	let detail = x =>{
+	let detail =x=>{
 		$('#recent_updates').html(brd_vue.brd_write())
 		$('#recent_updates div.container-fluid h1').html('ARTICLE DETAIL')
 		$('#write_form input[name="writer"]').val(x.cid)
@@ -124,7 +127,7 @@ brd = (()=>{
 		.appendTo('#write_form')
 		.click(()=>{
 			let json = {
-					aid : $('#write_form input[name="writer"]').val(),
+					cid : $('#write_form input[name="writer"]').val(),
 					title : $('#write_form input[name="title"]').val(),
 					content :$('#write_form input[name="content"]').val()
 			}
