@@ -11,6 +11,7 @@
 <script src="<%=application.getContextPath()%>/resources/js/brd/brd.js"></script>
 <script src="<%=application.getContextPath()%>/resources/js/cmm/navi.js"></script>
 <script src="<%=application.getContextPath()%>/resources/js/app.js"></script>
+<script src="<%=application.getContextPath()%>/resources/js/adm/adm.js"></script>
 <script>
 	app.run('<%=application.getContextPath()%>');
 </script>
