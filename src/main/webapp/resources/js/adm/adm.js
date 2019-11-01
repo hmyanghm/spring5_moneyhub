@@ -46,7 +46,7 @@ adm = (()=>{
 			$('<div name="'+j.name+'">'+j.txt+'</div>')
 			.css({border: '2px solid #7792af', margin: '0 auto', height: '7%', 'line-height': '50px'})
 			.appendTo('#left')
-			.hover(function(){
+			.click(function(){
 				$(this).addClass('active')
 				$(this).siblings().removeClass('active')
 				switch($(this).attr('name')){
@@ -72,18 +72,32 @@ adm = (()=>{
 			})
 		})
 	let webCrawl=()=>{
-		$('<form id="formlist"><select name="list"></select></form>').appendTo('#right')
-		$.each([{name: '네이버', url: 'http://www.naver.com/'},
-				{name: '구글', url: 'http://www.google.co.kr/'},
-				{name: '다음', url: 'http://www.daum.net/'},
-				{name: '네이트', url: 'http://www.nate.com/'}],
-				(i,j)=>{
-					$('<option value="'+j.url+'">'+j.name+'</option>')
-					.appendTo('#formlist select')
-				})
-				$('<input type="submit">',{
-				}).appendTo('#right')
-	
+			$('#right').empty()
+			$('</br></br></br></br></br><h2>Web Crawling</h2></br></br></br></br></br></br></br>'+
+					'<form id="crawl_form" class="form-inline my-2 my-lg-0">'+
+					'  <select name="site" size="2" multiple>'+
+					'  </select>'+
+			        '<input class="form-control mr-sm-2" type="text" placeholder="insert URL for crawling" aria-label="Search">'+
+					'</form>')
+			.appendTo('#right')
+			$('#crawl_form input[class="form-control mr-sm-2"]')
+			.css({width:'80%'})
+			$.each([{sub:'naver.com'},{sub:'daum.net'},{sub:'google.co.kr'},{sub:'youtube.com'}],(i,j)=>{
+				$('<option value='+j.sub+'>'+j.sub+'</option>').appendTo('#crawl_form select')
+			})
+			$('<button class="btn btn-secondary my-2 my-sm-0" type="submit">go crawl</button>')
+			.appendTo('#crawl_form')
+			.click(e=>{
+				e.preventDefault()
+				let arr = [$('#crawl_form select[name="site"]').val(),
+							$('#crawl_form input[type="text"]').val()]
+				if(!$.fn.nullChecker(arr)){
+					$.getJSON(_+'/tx/crawling/'+arr[0]+'/'+arr[1],d=>{
+					alert(d.msg)
+					})
+				}
+			})
+		}
 	let custManager=()=>{
 			alert('고객관리')
 		}
@@ -123,6 +137,5 @@ adm = (()=>{
 		'    <th>Country</th>'+
 		'  </tr>'+
 		'</table>')*/
-	}
 	return {onCreate}
 })();
