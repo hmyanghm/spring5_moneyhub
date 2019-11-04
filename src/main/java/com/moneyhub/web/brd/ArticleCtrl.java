@@ -1,5 +1,6 @@
 package com.moneyhub.web.brd;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
@@ -43,12 +44,16 @@ public class ArticleCtrl {
 		return map;
 	}
 	
-	@GetMapping("/")
-	public List<Article> list(){
+	@GetMapping("/page/{pageNo}")
+	public Map<?,?> list(@PathVariable String pageNo){
+		System.out.println("넘어온 페이지 넘버: "+pageNo);
 		list.clear();
 		ISupplier<List<Article>> s =()-> articleMapper.selectAll();
-		printer.accept("전체 글목록 \n"+s.get());
-		return s.get();
+		printer.accept("해당 페이지 글 목록 \n"+s.get());
+		map.clear();
+		map.put("articles", s.get());
+		map.put("pages", Arrays.asList(1,2,3,4,5));
+		return map;
 	}
 	
 	@GetMapping("/count")

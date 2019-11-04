@@ -269,7 +269,6 @@ auth_vue = {
 		'    </style>'+
 		'     <title>Signin Template · Bootstrap</title>'+
 		'    <link href="'+x.css+'/signin.css" rel="stylesheet">'+
-		'	<script src="'+x.js+'/app.js"></script>'+
 		'</head>'		
 	},
 	login_body: x => {

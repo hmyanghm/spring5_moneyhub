@@ -14,7 +14,11 @@
     </select>
     
    <select id="selectAll" resultType="Article">
-   		SELECT A.BOARD_TYPE AS boardType, A.* FROM ARTICLE A
+   		SELECT A.BOARD_TYPE AS boardType, A.* FROM (
+			SELECT * 
+			FROM ARTICLE
+			ORDER BY ARTSEQ DESC) A
+		LIMIT 0, 5
    </select>
    
 </mapper>

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.moneyhub.web.config.RootConfig;
+
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
