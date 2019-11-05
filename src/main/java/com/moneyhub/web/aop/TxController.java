@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.moneyhub.web.cmm.IConsumer;
 import com.moneyhub.web.cmm.IFunction;
+import com.moneyhub.web.pxy.ProxyMap;
 import com.moneyhub.web.utl.Printer;
 
 @RestController
@@ -26,6 +27,7 @@ public class TxController {
 	//@Autowired HashMap<String, String> map;
 	@Autowired Printer p;
 	@Autowired TxService txService;
+	@Autowired ProxyMap map;
 	
 	@GetMapping("/crawling/{site}/{srch}")
 	public void searchUrl(@PathVariable String site,

@@ -1,13 +1,14 @@
 package com.moneyhub.web.aop;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.moneyhub.web.pxy.Proxy;
 
 @Transactional //tx를 처리할 수 있는 능력을 준 것
 @Service

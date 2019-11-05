@@ -13,12 +13,12 @@
        SELECT COUNT(*) FROM ARTICLE
     </select>
     
-   <select id="selectAll" resultType="Article">
+   <select id="selectAll" resultType="Article" parameterType="Proxy">
    		SELECT A.BOARD_TYPE AS boardType, A.* FROM (
 			SELECT * 
 			FROM ARTICLE
 			ORDER BY ARTSEQ DESC) A
-		LIMIT 0, 5
+		LIMIT ${startRow}, ${pageSize}
    </select>
    
 </mapper>

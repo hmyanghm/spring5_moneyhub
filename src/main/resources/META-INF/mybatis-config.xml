@@ -8,5 +8,6 @@
        <typeAlias alias="Client"  type="com.moneyhub.web.usr.Client"/>
        <typeAlias alias="Article"  type="com.moneyhub.web.brd.Article"/>
        <typeAlias alias="Admin"  type="com.moneyhub.web.adm.Admin"/>
+       <typeAlias alias="Proxy"  type="com.moneyhub.web.pxy.Proxy"/>
     </typeAliases>
 </configuration>

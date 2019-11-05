@@ -3,7 +3,6 @@ page_vue = {
 	pagination: ()=>{
 		return '<div class="container">'+
 		'  <h2>Pagination</h2>'+
-		'  <p>To create a basic pagination, add the .pagination class to an ul element. Then add the .page-item to each li element and a .page-link class to each link inside li:</p>                  '+
 		'  <ul id="pagination" class="pagination">'+
 		'    <li class="page-item"><a class="page-link" href="#">Previous</a></li>'+
 		'    <li class="page-item"><a class="page-link" href="#">1</a></li>'+
