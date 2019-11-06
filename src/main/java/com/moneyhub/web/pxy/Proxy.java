@@ -3,6 +3,7 @@ package com.moneyhub.web.pxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.jsoup.Connection;
@@ -21,6 +22,7 @@ import lombok.Data;
 @Component @Data @Lazy
 public class Proxy {
 	private int pageNum, pageSize, startRow, endRow;
+	private boolean existPrev, existNext;
 	private String search;
 	private final int BLOCK_SIZE = 5;
 	@Autowired Printer p;
@@ -30,25 +32,17 @@ public class Proxy {
 	public void paging() {
 		ISupplier<String> s = ()->articleMapper.countArticle();
 		int totalCount = Integer.parseInt(s.get());
-		int pageCount = (totalCount % pageSize != 0) 
-						? (totalCount/pageSize)+1
-						: totalCount/pageSize;
-		startRow = (pageNum-1)*pageSize;
-		endRow = (pageNum==pageCount) 
-				? totalCount-1
-				: startRow+pageSize-1;
-		/*int blockCount = (blockCount != pageSize) 
-					? pageCount % pageSize 
-					: pageSize;*/
-		int blockCount = (pageCount % BLOCK_SIZE != 0)
-				?(pageCount/BLOCK_SIZE)+1
-				:(pageCount/BLOCK_SIZE);
-		/*int blockNum = (totalCount/pageSize)+1;*/
-		int blockNum = (pageNum -1) / BLOCK_SIZE;
-	/*	int startPage = blockCount * BLOCK_SIZE-4;
-		int endPage = BLOCK_SIZE * (blockNum+1);
-		boolean existPrev = false;
-		boolean existNext = false;*/
+		System.out.println("프록시 안에서 찍은 전체글 수: "+totalCount);
+		int pageCount = (totalCount % pageSize != 0) ? (totalCount / pageSize) + 1 : totalCount / pageSize;
+		startRow = (pageNum - 1) * pageSize;
+		endRow = (pageNum == pageCount) ? totalCount - 1 : startRow + pageSize - 1;
+		int blockCount = (pageCount % BLOCK_SIZE != 0) ? (pageCount / BLOCK_SIZE) + 1 : (pageCount / BLOCK_SIZE);
+		int blockNum = (pageNum - 1) / BLOCK_SIZE;
+		int startPage = (blockNum * BLOCK_SIZE) + 1;
+		int endPage = ((blockNum + 1) != blockCount) ? startPage + (BLOCK_SIZE - 1) : pageCount;
+		existPrev = blockNum != 0;
+		existNext = (blockNum + 1) != blockCount;
+		
 	}
 	
 	public int parseInt(String param) {
@@ -76,5 +70,14 @@ public class Proxy {
 		}
 		return proxyList;
 	}
-
+	
+/*	public int random(int param){
+		Supplier<Integer> s = () -> (int)(Math.random()*100)+1;
+		return s.get();
+	}*/
+	
+	public int random(int a, int b) {
+		BiFunction<Integer, Integer, Integer> f = (t,u)->(int)(Math.random()*(u-t))+t;
+		return f.apply(a, b);
+	}
 }
