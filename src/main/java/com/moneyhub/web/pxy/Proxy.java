@@ -21,7 +21,9 @@ import lombok.Data;
 
 @Component @Data @Lazy
 public class Proxy {
-	private int pageNum, pageSize, startRow, endRow;
+	private int totalCount, startRow, endRow, 
+				pageCount, pageNum, pageSize, startPage, endPage,
+				blockCount, blockNum, nextBlock, prevBlock;
 	private boolean existPrev, existNext;
 	private String search;
 	private final int BLOCK_SIZE = 5;
@@ -31,17 +33,31 @@ public class Proxy {
 	@SuppressWarnings("unused")
 	public void paging() {
 		ISupplier<String> s = ()->articleMapper.countArticle();
-		int totalCount = Integer.parseInt(s.get());
-		System.out.println("프록시 안에서 찍은 전체글 수: "+totalCount);
-		int pageCount = (totalCount % pageSize != 0) ? (totalCount / pageSize) + 1 : totalCount / pageSize;
+		totalCount = Integer.parseInt(s.get());
+		pageCount = (totalCount % pageSize != 0) ? (totalCount / pageSize) + 1 : totalCount / pageSize;
 		startRow = (pageNum - 1) * pageSize;
 		endRow = (pageNum == pageCount) ? totalCount - 1 : startRow + pageSize - 1;
-		int blockCount = (pageCount % BLOCK_SIZE != 0) ? (pageCount / BLOCK_SIZE) + 1 : (pageCount / BLOCK_SIZE);
-		int blockNum = (pageNum - 1) / BLOCK_SIZE;
-		int startPage = (blockNum * BLOCK_SIZE) + 1;
-		int endPage = ((blockNum + 1) != blockCount) ? startPage + (BLOCK_SIZE - 1) : pageCount;
+		blockCount = (pageCount % BLOCK_SIZE != 0) ? (pageCount / BLOCK_SIZE) + 1 : (pageCount / BLOCK_SIZE);
+		blockNum = (pageNum - 1) / BLOCK_SIZE;
+		startPage = (blockNum * BLOCK_SIZE) + 1;
+		endPage = ((blockNum + 1) != blockCount) ? startPage + (BLOCK_SIZE - 1) : pageCount;
 		existPrev = blockNum != 0;
 		existNext = (blockNum + 1) != blockCount;
+		nextBlock = startPage + pageSize;
+		prevBlock = startPage - pageSize;
+		
+		System.out.println("프록시 안에서 찍은 전체글 수: "+totalCount);
+		System.out.println("프록시 안에서 찍은 pageCount: "+pageCount);
+		System.out.println("프록시 안에서 찍은 startRow: "+startRow);
+		System.out.println("프록시 안에서 찍은 endRow: "+endRow);
+		System.out.println("프록시 안에서 찍은 blockCount: "+blockCount);
+		System.out.println("프록시 안에서 찍은 blockNum: "+blockNum);
+		System.out.println("프록시 안에서 찍은 startPage: "+startPage);
+		System.out.println("프록시 안에서 찍은 endPage: "+endPage);
+		System.out.println("프록시 안에서 찍은 existPrev: "+existPrev);
+		System.out.println("프록시 안에서 찍은 existNext: "+existNext);
+		System.out.println("프록시 안에서 찍은 nextBlock: "+nextBlock);
+		System.out.println("프록시 안에서 찍은 prevBlock: "+prevBlock);
 		
 	}
 	

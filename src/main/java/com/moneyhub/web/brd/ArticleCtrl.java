@@ -58,8 +58,8 @@ public class ArticleCtrl {
 		printer.accept("해당 페이지 글목록 \n"+s.get());
 		int ran = pxy.random(3, 4);
 		System.out.println("랜덤 수 출력: "+ran);
-		map.accept(Arrays.asList("articles", "pages", "pxy"),
-				Arrays.asList(s.get(),Arrays.asList(1,2,3,4,5), pxy));
+		map.accept(Arrays.asList("articles", "pxy"),
+				Arrays.asList(s.get(), pxy));
 		return map.get();
 	}
 	
